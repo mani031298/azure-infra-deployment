@@ -26,3 +26,5 @@ terraform.rc
 *.env
 *.tfvars
 *.tfvars.json
+.terraform/
+terraform.tfstate*

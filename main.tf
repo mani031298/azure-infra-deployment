@@ -1,9 +1,16 @@
-# Resource Group
 
+# Random suffix for storage account name
+resource "random_string" "storage_name" {
+  length  = 8
+  lower   = true
+  upper   = false
+  number  = true
+  special = false  # No special characters
+}
 
 # Storage Account
 resource "azurerm_storage_account" "storage" {
-  name                     = "st${lower(random_string.storage_name.result)}"
+name = "st${random_string.storage_name.result}"
   resource_group_name      = data.azurerm_resource_group.rg.name
   location                 = data.azurerm_resource_group.rg.location
   account_tier             = "Standard"
@@ -16,11 +23,7 @@ resource "azurerm_storage_container" "container" {
   container_access_type = "private"
 }
 
-# Random suffix for storage account name
-resource "random_string" "storage_name" {
-  length  = 8
-  numeric = true
-}
+
 
 # Virtual Network + Subnet
 resource "azurerm_virtual_network" "vnet" {

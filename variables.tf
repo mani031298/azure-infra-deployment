@@ -5,7 +5,7 @@ variable "location" {
 }
 
 data "azurerm_resource_group" "rg" {
-  name = "kml_rg_main-16ae5042722d43b3"  # existing RG in your lab
+  name = "kml_rg_main-1d9bd157bb864a17"  # existing RG in your lab
 }
 
 variable "vm_size" {
