@@ -4,9 +4,6 @@ variable "location" {
   default     = "East US"
 }
 
-data "azurerm_resource_group" "rg" {
-  name = "kml_rg_main-abda17cdc7c445b7"  # existing RG in your lab
-}
 
 variable "vm_size" {
   description = "Size of the VM"
