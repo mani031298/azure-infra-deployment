@@ -1,25 +1,49 @@
 pipeline {
-  agent any
-  stages {
-    stage('Checkout') {
-      steps {
-        git branch: 'main', url: 'https://github.com/mani031298/azure-infra-deployment.git>.git'
-      }
+    agent any
+
+    environment {
+        TERRAFORM_DIR = '.'  // Directory where your main.tf is
     }
-    stage('Terraform Init') {
-      steps {
-        sh 'terraform init'
-      }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/mani031298/azure-infra-deployment.git>.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                script {
+                    sh "terraform -chdir=${env.TERRAFORM_DIR} init -input=false"
+                }
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                script {
+                    sh "terraform -chdir=${env.TERRAFORM_DIR} plan -out=tfplan -input=false"
+                }
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                script {
+                    sh "terraform -chdir=${env.TERRAFORM_DIR} apply -auto-approve tfplan"
+                }
+            }
+        }
     }
-    stage('Terraform Plan') {
-      steps {
-        sh 'terraform plan -out=tfplan'
-      }
+
+    post {
+        success {
+            echo "Terraform deployment succeeded!"
+        }
+        failure {
+            echo "Terraform deployment failed. Check logs!"
+        }
     }
-    stage('Terraform Apply') {
-      steps {
-        sh 'terraform apply -auto-approve tfplan'
-      }
-    }
-  }
 }
